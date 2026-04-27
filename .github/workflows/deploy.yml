@@ -1,0 +1,40 @@
+name: Deploy CMDMS V2 to Render
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Trigger Render Deploy
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Trigger Render Deploy Hook
+        run: |
+          curl -fsSL -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+          echo "✅ Render deploy hook triggered"
+
+  test-backend:
+    runs-on: ubuntu-latest
+    name: Lint Backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          cd backend
+          pip install -r requirements.txt
+      - name: Check syntax
+        run: |
+          cd backend
+          python -m py_compile app.py models.py config.py wsgi.py
+          python -m py_compile routes/auth.py routes/members.py routes/attendance.py
+          python -m py_compile routes/finance.py routes/events.py routes/users.py routes/dashboard.py
+          echo "✅ Backend syntax OK"
