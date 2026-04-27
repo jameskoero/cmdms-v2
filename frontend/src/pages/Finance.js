@@ -24,7 +24,7 @@ function typeBadge(type) {
 const fmt = (n) => 'KES ' + new Intl.NumberFormat('en-KE').format(Math.round(n || 0));
 
 export default function Finance() {
-  const { can } = useAuth();
+  const { can, user: _u } = useAuth();
   const [transactions, setTransactions] = useState([]);
   const [total, setTotal] = useState(0);
   const [pages, setPages] = useState(1);

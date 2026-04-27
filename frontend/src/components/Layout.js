@@ -14,7 +14,7 @@ const NAV = [
 const ROLE_HIERARCHY = { admin: 5, pastor: 4, treasurer: 3, secretary: 2, viewer: 1 };
 
 export default function Layout() {
-  const { user, logout, can } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
